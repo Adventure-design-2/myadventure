@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "334028209671",
+    "project_id": "gen-lang-client-0976176955",
+    "storage_bucket": "gen-lang-client-0976176955.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334028209671:android:7a782f3232987e5873b4a2",
+        "android_client_info": {
+          "package_name": "com.example.myadventure"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Rvwo9ythBY2a0yuQ-GKG8_Dgxv7dctg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
