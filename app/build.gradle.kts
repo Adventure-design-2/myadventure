@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "com.example.myadventure"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -37,6 +37,15 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    // Jetpack Compose 활성화
+    buildFeatures {
+        compose = true // Compose 사용 여부를 설정
+    }
+
+    // Compose 관련 옵션
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3" // Compose 컴파일러의 최신 버전 지정
+    }
 }
 
 dependencies {
@@ -59,5 +68,22 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore)
     implementation(libs.play.services.auth)
+
+    implementation(platform(libs.androidx.compose.bom)) // Compose BOM
+
+    implementation(libs.androidx.ui) // Compose UI
+    implementation(libs.androidx.material3) // Material Design 3
+    implementation(libs.androidx.ui.tooling.preview) // UI 미리보기
+    implementation(libs.androidx.lifecycle.runtime.compose) // LiveData 연동
+    implementation(libs.androidx.lifecycle.viewmodel.compose) // ViewModel 연동
+    implementation(libs.androidx.navigation.compose) // Navigation
+    implementation(libs.androidx.activity.compose) // Activity에서 Compose 사용
+
+    debugImplementation(libs.androidx.ui.tooling) // UI 디버깅 도구
+    debugImplementation(libs.androidx.ui.test.manifest) // UI 테스트 매니페스트 디버깅
+
+    androidTestImplementation(libs.androidx.ui.test.junit4) // UI 테스트용 라이브러리
+
+
 
 }
