@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -78,11 +80,15 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose) // ViewModel 연동
     implementation(libs.androidx.navigation.compose) // Navigation
     implementation(libs.androidx.activity.compose) // Activity에서 Compose 사용
-
+    implementation(libs.androidx.ui.text) // 텍스트
     debugImplementation(libs.androidx.ui.tooling) // UI 디버깅 도구
     debugImplementation(libs.androidx.ui.test.manifest) // UI 테스트 매니페스트 디버깅
 
     androidTestImplementation(libs.androidx.ui.test.junit4) // UI 테스트용 라이브러리
+    implementation(libs.kotlinx.coroutines.core)
+
+    // 이미지 추가
+    implementation(libs.coil.compose)
 
 
 

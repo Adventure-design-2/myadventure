@@ -1,6 +1,11 @@
 package com.example.myadventure.auth
 
+import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.example.myadventure.auth.AuthState.Error
+import com.example.myadventure.auth.AuthState.Idle
+import com.example.myadventure.auth.AuthState.Loading
+import com.example.myadventure.auth.AuthState.Success
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -10,14 +15,14 @@ import kotlinx.coroutines.flow.StateFlow
 class AuthViewModel(private val authManager: AuthManager) : ViewModel() {
 
     // 인증 상태를 관리하는 StateFlow
-    private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
+    private val _authState = MutableStateFlow<AuthState>(Idle)
     val authState: StateFlow<AuthState> get() = _authState
 
     /**
      * 회원가입: Firebase Authentication 및 Firestore에 사용자 정보 저장
      */
     fun registerUser(email: String, password: String, name: String) {
-        _authState.value = AuthState.Loading // 로딩 상태로 변경
+        _authState.value = Loading // 로딩 상태로 변경
         val additionalData = mapOf(
             "name" to name,
             "email" to email,
@@ -28,10 +33,10 @@ class AuthViewModel(private val authManager: AuthManager) : ViewModel() {
             password = password,
             additionalData = additionalData,
             onSuccess = {
-                _authState.value = AuthState.Success("회원가입 성공: $email")
+                _authState.value = Success("회원가입 성공: $email")
             },
             onFailure = {
-                _authState.value = AuthState.Error(it)
+                _authState.value = Error(it)
             }
         )
     }
@@ -40,15 +45,15 @@ class AuthViewModel(private val authManager: AuthManager) : ViewModel() {
      * 로그인: Firebase Authentication 및 Firestore에서 사용자 확인
      */
     fun loginUser(email: String, password: String) {
-        _authState.value = AuthState.Loading // 로딩 상태로 변경
+        _authState.value = Loading // 로딩 상태로 변경
         authManager.loginUser(
             email = email,
             password = password,
             onSuccess = {
-                _authState.value = AuthState.Success("로그인 성공: $email")
+                _authState.value = Success("로그인 성공: $email")
             },
             onFailure = {
-                _authState.value = AuthState.Error(it)
+                _authState.value = Error(it)
             }
         )
     }
@@ -58,16 +63,23 @@ class AuthViewModel(private val authManager: AuthManager) : ViewModel() {
      */
     fun logoutUser() {
         authManager.logoutUser()
-        _authState.value = AuthState.Idle // 초기 상태로 변경
+        _authState.value = Idle // 초기 상태로 변경
+    }
+
+    /**
+     * Google 로그인 처리
+     */
+    fun loginWithGoogle(data: Intent?, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        if (data == null) {
+            onFailure("Google 로그인 데이터가 비어 있습니다.")
+            return
+        }
+
+        authManager.handleGoogleSignInResult(
+            data = data,
+            onSuccess = { message -> onSuccess(message) },
+            onFailure = { error -> onFailure(error) }
+        )
     }
 }
 
-/**
- * 인증 상태를 나타내는 sealed class
- */
-sealed class AuthState {
-    data object Idle : AuthState() // 초기 상태
-    data object Loading : AuthState() // 로딩 중
-    data class Success(val message: String) : AuthState() // 성공 상태
-    data class Error(val error: String) : AuthState() // 실패 상태
-}
