@@ -81,8 +81,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose) // Navigation
     implementation(libs.androidx.activity.compose) // Activity에서 Compose 사용
     implementation(libs.androidx.ui.text) // 텍스트
+    implementation(libs.androidx.compose.ui.ui) // Compose UI
     debugImplementation(libs.androidx.ui.tooling) // UI 디버깅 도구
     debugImplementation(libs.androidx.ui.test.manifest) // UI 테스트 매니페스트 디버깅
+    implementation(libs.androidx.runtime) // Compose Runtime
 
     androidTestImplementation(libs.androidx.ui.test.junit4) // UI 테스트용 라이브러리
     implementation(libs.kotlinx.coroutines.core)

@@ -2,10 +2,7 @@ package com.example.myadventure.auth
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
-import com.example.myadventure.auth.AuthState.Error
 import com.example.myadventure.auth.AuthState.Idle
-import com.example.myadventure.auth.AuthState.Loading
-import com.example.myadventure.auth.AuthState.Success
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -22,41 +19,34 @@ class AuthViewModel(private val authManager: AuthManager) : ViewModel() {
      * 회원가입: Firebase Authentication 및 Firestore에 사용자 정보 저장
      */
     fun registerUser(email: String, password: String, name: String) {
-        _authState.value = Loading // 로딩 상태로 변경
-        val additionalData = mapOf(
-            "name" to name,
-            "email" to email,
-            "created_at" to System.currentTimeMillis()
-        )
+        _authState.value = AuthState.Loading
         authManager.registerUser(
             email = email,
             password = password,
-            additionalData = additionalData,
+            additionalData = mapOf("name" to name),
             onSuccess = {
-                _authState.value = Success("회원가입 성공: $email")
+                _authState.value = AuthState.Success("회원가입 성공")
             },
             onFailure = {
-                _authState.value = Error(it)
+                _authState.value = AuthState.Error("회원가입 실패: $it")
             }
         )
     }
 
-    /**
-     * 로그인: Firebase Authentication 및 Firestore에서 사용자 확인
-     */
     fun loginUser(email: String, password: String) {
-        _authState.value = Loading // 로딩 상태로 변경
+        _authState.value = AuthState.Loading
         authManager.loginUser(
             email = email,
             password = password,
             onSuccess = {
-                _authState.value = Success("로그인 성공: $email")
+                _authState.value = AuthState.Success("로그인 성공")
             },
             onFailure = {
-                _authState.value = Error(it)
+                _authState.value = AuthState.Error("로그인 실패: $it")
             }
         )
     }
+
 
     /**
      * 로그아웃: 인증 상태를 초기화

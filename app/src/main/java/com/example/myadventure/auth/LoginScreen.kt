@@ -1,48 +1,27 @@
 package com.example.myadventure.auth
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(authViewModel: AuthViewModel = viewModel()) {
-    var name by remember { mutableStateOf("") }
+    // 사용자 입력 상태 관리
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val authState by authViewModel.authState.collectAsState()
 
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Login", style = MaterialTheme.typography.titleLarge) }
-            )
+            CenterAlignedTopAppBar(title = { Text("로그인") })
         }
     ) { paddingValues ->
         Column(
@@ -53,57 +32,58 @@ fun LoginScreen(authViewModel: AuthViewModel = viewModel()) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Name") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedButton(
-                onClick = { authViewModel.registerUser(email, password, name) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Register")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                onClick = { authViewModel.loginUser(email, password) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Login")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            when (authState) {
-                is AuthState.Loading -> CircularProgressIndicator()
-                is AuthState.Success -> Text(
-                    text = (authState as AuthState.Success).message,
-                    color = MaterialTheme.colorScheme.primary
+            // 로그인 상태 확인
+            if (authState is AuthState.Success) {
+                Text("로그인 성공!")
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = { authViewModel.logoutUser() },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("로그아웃")
+                }
+            } else {
+                // 이메일 및 비밀번호 입력
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("이메일") },
+                    modifier = Modifier.fillMaxWidth()
                 )
-                is AuthState.Error -> Text(
-                    text = (authState as AuthState.Error).error,
-                    color = MaterialTheme.colorScheme.error
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("비밀번호") },
+                    modifier = Modifier.fillMaxWidth(),
+                    visualTransformation = PasswordVisualTransformation()
                 )
-                AuthState.Idle -> {}
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // 로그인 버튼
+                Button(
+                    onClick = { authViewModel.loginUser(email, password) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("로그인")
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // 회원가입 버튼
+                OutlinedButton(
+                    onClick = { authViewModel.registerUser(email, password, "사용자 이름") },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("회원가입")
+                }
             }
         }
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun PreviewLoginScreen() {
+    LoginScreen()
+}

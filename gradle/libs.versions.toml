@@ -18,18 +18,22 @@ navigationFragmentKtx = "2.8.4"
 navigationUiKtx = "2.8.4"
 playServicesAuth = "20.5.0"
 firebaseStorageKtx = "21.0.1"
+runtimeVersion = "1.5.0"
 uiTextVersion = "1.5.0"
 firebaseCrashlyticsBuildtools = "3.0.2"
+uiVersion = "1.5.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "uiVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose" }
 androidx-material = { module = "androidx.compose.material:material" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose" }
+androidx-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "runtimeVersion" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version = "1.7.5" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
